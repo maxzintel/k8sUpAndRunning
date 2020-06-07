@@ -64,6 +64,7 @@ spec:
 * Add a liveness probe to our existing pod manifest:
   * Liveness probes are container/application specific, thus we have to define them in the pod manifest individually.
   * After applying this pod manifest (and after deleting the old pod), you can actually view these liveness probes by running the port-forward command from above and navigating to `Liveness Probe`.
+    * You can force failures here too!
 ```yml
 apiVersion: v1
 kind: Pod
@@ -81,6 +82,28 @@ spec:
         timeoutSeconds: 1
         periodSeconds: 10
         failureThreshold: 3 
+      ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+```
+
+## Resource Allocation
+* **Resource Request**: The minimum amount of resources the Pod requests to run its containers. Kubernetes will schedule the Pod onto a Node with at least this minimum of resources available.
+  * i.e. the Pod _requests_ to be scheduled on a Node with at least the resources available.
+```yml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kuard
+spec:
+  containers:
+    - image: gcr.io/kuar-demo/kuard-amd64:blue
+      name: kuard
+      resources:
+        requests:
+          cpu: "500m"
+          memory: "128Mi"
       ports:
         - containerPort: 8080
           name: http
