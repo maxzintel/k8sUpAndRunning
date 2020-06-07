@@ -20,3 +20,11 @@
         * 'Communication between the control plane and worker nodes in group ng-73166dbe	'
       * `eksctl-cluster-sg-k8sUp-100598305`
         * 'EKS created security group applied to ENI that is attached to EKS Control Plane master nodes, as well as any managed workloads.'
+
+### Test Image:
+* Kuard: gcr.io/kuar-demo/kuard-amd64:blue
+  * `docker pull gcr.io/kuar-demo/kuard-amd64:blue`
+  * From above, we now have a docker image, tagged `blue`, locally.
+  * We can run it with `docker run --rm -p 8080:8080 <image-id>`
+    * Navigate to localhost:8080 to view the running application.
+  * To stop it, run `docker ps` will give you the container-id, then `docker stop <container-id>` will do the trick.
