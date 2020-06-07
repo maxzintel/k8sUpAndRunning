@@ -59,3 +59,30 @@ spec:
 * Execute commands in the container with `kubectl exec kuard <command>`, ex: `date`.
 * Open an interactive shell with `kubectl exec -it kuard ...`
 * Delete it with `kubectl delete pods/kuard`
+
+## Health Checks
+* Add a liveness probe to our existing pod manifest:
+  * Liveness probes are container/application specific, thus we have to define them in the pod manifest individually.
+  * After applying this pod manifest (and after deleting the old pod), you can actually view these liveness probes by running the port-forward command from above and navigating to `Liveness Probe`.
+```yml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kuard
+spec:
+  containers:
+    - image: gcr.io/kuar-demo/kuard-amd64:blue
+      name: kuard
+      livenessProbe:
+        httpGet:
+          path: /healthy
+          port: 8080
+        initialDelaySeconds: 5
+        timeoutSeconds: 1
+        periodSeconds: 10
+        failureThreshold: 3 
+      ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+```
