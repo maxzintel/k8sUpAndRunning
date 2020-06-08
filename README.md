@@ -130,3 +130,15 @@ spec:
   * `spec.containers.volumeMounts` is the second stanza we need to define for persistent pod storage. 
     * This array defines the volumes that are mounted into a particular container, and the path where each volume should be mounted.
     * Different containers can mount to the same volume, but they must use **different mount paths**.
+* What if we want data to persist even when a Pod is restarted on a different Node?
+  * You want **Remote Network Storage** rather than using the on-node hostPath (the Node's filesystem) as the persistent volume, like we did in `kuard-pod-vol.yml`.
+    * A brief example of what this would look like is describe below, and will be covered more in depth later on.
+```yml
+# ...
+volumes:
+  - name: "kuard-data"
+    nfs:
+      server: my.nfs.server.local
+      path: "/exports"
+# ...
+```

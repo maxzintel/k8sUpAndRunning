@@ -5,8 +5,9 @@ metadata:
 spec:
   volumes:
     - name: "kuard-data"
-      hostPath:
-        path: "/var/lib/kuard"
+      nfs:
+        server: my.nfs.server.local
+        path: "/exports"
   containers:
     - image: gcr.io/kuar-demo/kuard-amd64:blue
       name: kuard
@@ -25,6 +26,14 @@ spec:
           path: /healthy
           port: 8080
         initialDelaySeconds: 5
+        timeoutSeconds: 1
+        periodSeconds: 10
+        failureThreshold: 3
+      readinessProbe:
+        httpGet:
+          path: /ready
+          port: 8080
+        initialDelaySeconds: 30
         timeoutSeconds: 1
         periodSeconds: 10
         failureThreshold: 3 
