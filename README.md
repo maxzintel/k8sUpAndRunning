@@ -112,13 +112,13 @@ spec:
 * **Resource Limits**: Similarly, we can set the maximum amount of resources a Pod/container can use.
 ```yml
 # ...
-      resources:
-        requests:
-          cpu: "500m"
-          memory: "128Mi"
-        limits:
-          cpu: "1000m"
-          memory: "256Mi"
+resources:
+  requests:
+    cpu: "500m"
+    memory: "128Mi"
+  limits:
+    cpu: "1000m"
+    memory: "256Mi"
 # ...
 ```
   
@@ -142,3 +142,16 @@ volumes:
       path: "/exports"
 # ...
 ```
+  
+## Labels & Annotations
+* **Labels** are key/value pairs used to group kubernetes objects. They are simply identifying metadata for objects like Pods and ReplicaSets.
+  * Ex Keys: `acme.com/app-version`, `appVersion`, `app.version`, `kubernetes.io/cluster-service`
+  * Ex Values: `1.0.0`, `true`
+* Search/filter Pods by labels with `kubectl get pods --show-labels` & `kubectl get pods --selector="<Key=Value,...>"`
+  * Return pods with an OR conditional with `kubectl get pods --selector="<KEY in (value1,value2,...)>"`
+  * There are many `--selector` operators that can be used here, like `=`, `!=`, `in`, etc...
+* **Annotations** are also k/v pairs, and are used to provide extra information about the object.
+  * ex: where it came from, how to use it, or some policy around it.
+  * When in doubt, use Annotations to add info about an object, and promote it to a label if we want to use a selector query to group it.
+  * **Primarily used in rolling deployments.** In this case, annotations are used to track rollout status and provide necessary data to rollback to the previous state if need be.
+  * If you want to get crafty, you can store a json object (encoded to a string) as an annotation. However, if the object is invalid in some way, we would not know.
