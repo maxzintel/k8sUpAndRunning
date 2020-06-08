@@ -109,3 +109,15 @@ spec:
           name: http
           protocol: TCP
 ```
+* **Resource Limits**: Similarly, we can set the maximum amount of resources a Pod/container can use.
+```yml
+# ...
+      resources:
+        requests:
+          cpu: "500m"
+          memory: "128Mi"
+        limits:
+          cpu: "1000m"
+          memory: "256Mi"
+# ...
+```
