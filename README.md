@@ -165,3 +165,12 @@ volumes:
 * **Readiness Checks**: We've already covered these, the main thing to know is that, if a container is failing readiness checks, K8s will not send traffic to it. This also helps with graceful shutdowns. If a container fails its readiness checks, it is no longer assigned traffic, so if we wait until all of its existing connections are closed, shutting down will be much more safe.
 * **NodePorts**: Are the ports to/from which we want Node traffic to flow. These are set in the Service Object as `spec.type: NodePort`.
 * **LoadBalancer**: Builds on top of the NodePort type and is used in cloud K8s environments. Basically, setting a Service Object to a LoadBalancer type will create a load balancer in your cloud environment and direct it towards the nodes in your cluster.
+* **Endpoints**: An object great for applications from which you are designing for K8s from the start. This is an alternative to using ClusterIP's. Basically, for every service object there would be a 'buddy' Endpoints object created by K8s that contains the IP's for that service.
+* **kube-proxy**: Watches for new services in the cluster via the API server, then redirects packet destinations to one of the endpoints for that service. It is dynamic, so any scaling events will cause the service to re-write itself to reflect the new state of the system.
+* **Connecting to On-Prem Services**: We have 3 main options here.
+  * Use a selector-less kubernetes service to declare a manually input IP address. The IP address here is outside the cluster (what we use to hit the external service).
+    * This works for k8s => on-prem, but not vice-versa.
+  * Create an internal Load Balancer in your cloud environment, living in your VPC. This delivers traffic from a fixed IP (outside the cluster) into the kubernetes cluster.
+    * Likely your best option if your provider allows it.
+  * Run kube-proxy on the external service itself. This is generally the most complex option.
+  * Use something like Consul.
