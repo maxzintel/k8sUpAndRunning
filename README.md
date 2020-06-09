@@ -200,4 +200,15 @@ service/contour created
 service/envoy created
 deployment.apps/contour created
 daemonset.apps/envoy created
+...
+$ kubectl get -n projectcontour service contour -o wide
+```
+* Then, once we have contour installed, let's deploy some sample applications to configure our new ingress controller to use.
+```
+// After creating a deployment manifest...
+$ kubectl apply -f deployment.yml // creates the deployment via an empedded pod manifest in the deployment yaml.
+$ kubectl get deployments // view your deployments.
+$ kubectl get pods // view the pods you created from the deployments specifications.
+$ kubectl expose deployment alpaca // Creates a Service Object with a ClusterIP to allow Load Balancing to our deployment.
+$ kubectl get services // View our new alpaca service (and external clusterIP)
 ```
