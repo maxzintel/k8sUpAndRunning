@@ -155,3 +155,13 @@ volumes:
   * When in doubt, use Annotations to add info about an object, and promote it to a label if we want to use a selector query to group it.
   * **Primarily used in rolling deployments.** In this case, annotations are used to track rollout status and provide necessary data to rollback to the previous state if need be.
   * If you want to get crafty, you can store a json object (encoded to a string) as an annotation. However, if the object is invalid in some way, we would not know.
+  
+## Service Discovery in K8s
+* Service discovery helops solve the problem of finding which processes are listening, at which addresses, and for which services. 
+  * Basically, it is advanced DNS to serve the highly dynamic environment that is K8s.
+* This chapter reviews some imperative `kubectl` commands for creating and exposing services via Service Objects. We are not as interested in the imperative bits, so the notes here will focus on the concepts; how DNS/service discovery is working in kubernetes.
+* **The ClusterIP**: When a service is exposed in Kubernetes, it is assigned a ClusterIP. This is a virtual IP that K8s uses to identify a service, and uses to load balance across all the Pods identified by the selectors in the Service Object.
+* **Service DNS**: A DNS name assigned to a cluster IP. The DNS name provides further identification for a service, and is generally structured by `<nameOfService>.<namespace>.svc.<baseDomainForCluster>`.
+* **Readiness Checks**: We've already covered these, the main thing to know is that, if a container is failing readiness checks, K8s will not send traffic to it. This also helps with graceful shutdowns. If a container fails its readiness checks, it is no longer assigned traffic, so if we wait until all of its existing connections are closed, shutting down will be much more safe.
+* **NodePorts**: Are the ports to/from which we want Node traffic to flow. These are set in the Service Object as `spec.type: NodePort`.
+* **LoadBalancer**: Builds on top of the NodePort type and is used in cloud K8s environments. Basically, setting a Service Object to a LoadBalancer type will create a load balancer in your cloud environment and direct it towards the nodes in your cluster.
