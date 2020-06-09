@@ -174,3 +174,30 @@ volumes:
     * Likely your best option if your provider allows it.
   * Run kube-proxy on the external service itself. This is generally the most complex option.
   * Use something like Consul.
+  
+## Ingress!
+* Install Contour on our cluster:
+```
+$ kubectl apply -f https://j.hept.io/contour-deployment-rbac
+...
+namespace/projectcontour created
+serviceaccount/contour created
+serviceaccount/envoy created
+configmap/contour created
+customresourcedefinition.apiextensions.k8s.io/ingressroutes.contour.heptio.com created
+customresourcedefinition.apiextensions.k8s.io/tlscertificatedelegations.contour.heptio.com created
+customresourcedefinition.apiextensions.k8s.io/httpproxies.projectcontour.io created
+customresourcedefinition.apiextensions.k8s.io/tlscertificatedelegations.projectcontour.io created
+serviceaccount/contour-certgen created
+rolebinding.rbac.authorization.k8s.io/contour created
+role.rbac.authorization.k8s.io/contour-certgen created
+job.batch/contour-certgen-v1.5.0 created
+clusterrolebinding.rbac.authorization.k8s.io/contour created
+clusterrole.rbac.authorization.k8s.io/contour created
+role.rbac.authorization.k8s.io/contour-leaderelection created
+rolebinding.rbac.authorization.k8s.io/contour-leaderelection created
+service/contour created
+service/envoy created
+deployment.apps/contour created
+daemonset.apps/envoy created
+```
