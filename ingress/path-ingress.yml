@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: path-ingress
+spec:
+  rules:
+  - host: a044171ddb03046bdb613ff1fcc52c82-1028764584.us-east-1.elb.amazonaws.com
+    http:
+      paths:
+      - path: "/"
+        backend:
+          serviceName: bandicoot
+          servicePort: 8080
+      - path: "/a"
+        backend:
+          serviceName: alpaca
+          servicePort: 8080
