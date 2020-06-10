@@ -1,0 +1,12 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: host-ingress
+spec:
+  rules:
+  - host: a044171ddb03046bdb613ff1fcc52c82-1028764584.us-east-1.elb.amazonaws.com
+    http:
+      paths:
+      - backend:
+          serviceName: alpaca
+          servicePort: 8080
