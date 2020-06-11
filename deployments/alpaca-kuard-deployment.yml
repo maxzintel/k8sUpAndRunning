@@ -18,9 +18,12 @@ spec:
     metadata:
       labels:
         run: alpaca
+      annotations:
+        kubernetes.io/change-cause: "Nada"
     spec:
       containers:
         - image: gcr.io/kuar-demo/kuard-amd64:green
+          imagePullPolicy: Always
           name: kuard
           resources:
             requests:
