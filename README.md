@@ -214,3 +214,10 @@ $ kubectl get services // View our new alpaca service (and external clusterIP)
 ```
 * **Host Ingress**: Depicted in the host-ingress file, though it is depicted badly (because we haven't hooked a real host to our cluster yet), host ingress directs traffic from your ingress controller to a service based on the host name in the HTTP headers of the request. So, if we had two hosts (abc.brainbard.io and xyz.brainbard.io for example), we could use host ingress to direct http to the relevant services running in our cluster based on those two host names.
 * **Path Ingress**: Very similar to host ingress with the extra feature of directing traffic based on both the host and the `/path` following the hostname. This is particularly useful for microservice applications where we have different pod deployments running the services for different parts of a website/app. Ex: one deployment serves payments at `/cart`, another deployment serves store inventory at `/browse`, etc...
+
+## Deployments!
+* Deployment objects are generally used as an additional abstraction on top of ReplicaSets, and are well-suited for managing container images that developers are changing regularly.
+* The main features on top of ReplicaSets are the `spec.strategy` stanza, `spec.template.metadata.annotations.kubernetes.io/change-cause`, and `spec.template.containers.imagePullPolicy`.
+  * `spec.strategy`: Dictates different ways in which a rollout of new software can proceed. There are two primary ways 'Recreate' and 'RollingUpdate'.
+  * `change-cause`: Is basically a commit message. You can view previous change causes by running `kubectl rollout history deployment alpaca`.
+  * `imagePullPolicy`: Defines what changes to the Deployment YAML dictate a pull of the new image.

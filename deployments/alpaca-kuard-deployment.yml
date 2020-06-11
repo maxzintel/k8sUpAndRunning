@@ -19,7 +19,7 @@ spec:
       labels:
         run: alpaca
       annotations:
-        kubernetes.io/change-cause: "Nada"
+        kubernetes.io/change-cause: "To watch a rollout"
     spec:
       containers:
         - image: gcr.io/kuar-demo/kuard-amd64:green
