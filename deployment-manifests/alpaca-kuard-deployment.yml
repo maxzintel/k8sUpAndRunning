@@ -7,7 +7,8 @@ metadata:
 spec:
   replicas: 2
   revisionHistoryLimit: 10
-  minReadySeconds: 30 # Additional wait time to ensure Pods are healthy.
+  minReadySeconds: 60 # Additional wait time to ensure Pods are healthy.
+  progressDeadlineSeconds: 600 # If a given stage of the deployment takes longer than 10mins, mark the deployment as failed.
   selector:
     matchLabels:
       run: alpaca

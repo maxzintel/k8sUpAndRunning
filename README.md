@@ -238,3 +238,8 @@ $ kubectl get services // View our new alpaca service (and external clusterIP)
   * `kubectl rollout history deployment {deployment-name} --revision=2` - more details on a specific rollout based on revision 2.
   * `kubectl rollout undo deployments {deployment-name}` - to undo a rollout. Can be used while a rollout is in progress or complete. It's literally just the rollout you tried but in reverse. 
     * NOTE IT IS BETTER TO REVERT YOUR DEPLOYMENT MANIFEST BACK AND APPLY IT DECLARATIVELY.
+  * `kubectl delete deployments {deployment-name}` for imperative deletion, or declaratively: `kubectl delete -f {deployment-manifest}.yml`.
+* More deployment stanza's to help with deployment reliability and monitoring:
+  * `minReadySeconds: 60`: Additional wait time to ensure Pods are healthy. This is best used as a safeguard against bugs or memory leaks that take some time after a pod is running/handling traffic to cause problems. 60s is mostly arbitrary, but in this context we assume that most serious bugs would show up and cause a failed health check within that time period. **NOTE** that this should be configured to align with the timing and failure criteria for your health and liveness probes. In this case, 60s is the minimum time in which a health probe could fail.
+  * `progressDeadlineSeconds: 600`: If a given stage of the deployment takes longer than 10mins, mark the deployment as failed. It's best to add some sort of monitoring for failed deployments. Maybe a deployment with failed status triggers an automatic rollback and creates a ticket that requires human intervention, for example.
+    * To get the status, look in the `status.conditions` array where there will be a Condition whose type is Progressing and the Status is False.
