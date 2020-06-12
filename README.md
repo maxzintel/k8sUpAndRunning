@@ -217,7 +217,16 @@ $ kubectl get services // View our new alpaca service (and external clusterIP)
 
 ## Deployments!
 * Deployment objects are generally used as an additional abstraction on top of ReplicaSets, and are well-suited for managing container images that developers are changing regularly.
-* The main features on top of ReplicaSets are the `spec.strategy` stanza, `spec.template.metadata.annotations.kubernetes.io/change-cause`, and `spec.template.containers.imagePullPolicy`.
+* The main features on top of ReplicaSets are the `spec.strategy` stanza, `spec.template.metadata.annotations.kubernetes.io/change-cause`, `spec.revisionHistoryLimit`, and `spec.template.containers.imagePullPolicy`.
   * `spec.strategy`: Dictates different ways in which a rollout of new software can proceed. There are two primary ways 'Recreate' and 'RollingUpdate'.
   * `change-cause`: Is basically a commit message. You can view previous change causes by running `kubectl rollout history deployment alpaca`.
+  * `revisionHistoryLimit`: Aptly named. Sets the maximum number of revisions to a deployment that are stored. Ex: if you rollout daily, setting this to 14 will ensure your deployment revisions are visible/accessible for the last two weeks in K8s. AKA the limit at which you expect it is reasonable to have to roll back.
   * `imagePullPolicy`: Defines what changes to the Deployment YAML dictate a pull of the new image.
+* Common deployment kubectl commands:
+  * `kubectl rollout status deployments {deployment-name}` - to view and watch the rollout.
+  * `kubectl rollout pause deployments {deployment-name}`
+  * `kubectl rollout resume deployments {deployment-name}`
+  * `kubectl rollout history deployment {deployment-name}` - will output a list of your revision numbers and their associated change cause.
+  * `kubectl rollout history deployment {deployment-name} --revision=2` - more details on a specific rollout based on revision 2.
+  * `kubectl rollout undo deployments {deployment-name}` - to undo a rollout. Can be used while a rollout is in progress or complete. It's literally just the rollout you tried but in reverse. 
+    * NOTE IT IS BETTER TO REVERT YOUR DEPLOYMENT MANIFEST BACK AND APPLY IT DECLARATIVELY.
