@@ -7,13 +7,14 @@ metadata:
 spec:
   replicas: 2
   revisionHistoryLimit: 10
+  minReadySeconds: 30 # Additional wait time to ensure Pods are healthy.
   selector:
     matchLabels:
       run: alpaca
   strategy:
     rollingUpdate:
       maxSurge: 1
-      maxUnavailable: 1
+      maxUnavailable: 1 # This can also be set to a percentage, i.e. 20%.
     type: RollingUpdate
   template:
     metadata:
