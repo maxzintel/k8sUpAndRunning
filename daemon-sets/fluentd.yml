@@ -23,14 +23,14 @@ spec:
           requests:
             cpu: 100m
             memory: 200Mi
-        volumeMounts:
+        volumeMounts: # This stanza defines what volumes we want this container to mount to.
           - mountPath: /var/log
             name: varlog
           - mountPath: /var/lib/docker/containers
             name: varlibdockercontainers
             readOnly: true
       terminationGracePeriodSeconds: 30
-      volumes:
+      volumes: # Remember, this stanza specifies what volumes the containers in this set can access.
       - name: varlog
         hostPath:
           path: /var/log

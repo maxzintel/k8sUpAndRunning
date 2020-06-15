@@ -255,3 +255,7 @@ $ kubectl get services // View our new alpaca service (and external clusterIP)
 * **ReplicaSets should be used when your service is completely decoupled from the Node.** Meaning, we could run multiple copies of a ReplicaSet on a single Node without an issue. DaemonSets **must have one copy on each Node to function properly.**
 * By default, DaemonSets will schedule one per Node, unless a node selector is used to specify.
   * Use the `nodeName` field in the Pod spec to do this.
+  * This can be done declaratively upon provisioning your resources using terraform's `default_node_pool: node_labels`: https://www.terraform.io/docs/providers/azurerm/r/kubernetes_cluster.html
+    * Similarly, if you want to set `tags` that are visible to your Cloud Provider, there is a stanza for this as well!
+  * Alternatively, you can imperatively label the nodes in your cluster via: `kubectl label nodes ${node-name} ssd=true`.
+  * To get the labels for a particular node: `kubectl get nodes ip-192-168-17-43.ec2.internal -o json | jq .metadata.labels`
