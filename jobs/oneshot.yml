@@ -10,6 +10,6 @@ spec:
         image: perl
         imagePullPolicy: Always
         command: ["perl", "-Mbignum=bpi", "-wle", "print bpi(2000)"]
-      restartPolicy: Never
+      restartPolicy: Never # If the job does not run successfully, mark the Pod as failed and create a new one.
   backoffLimit: 3
 

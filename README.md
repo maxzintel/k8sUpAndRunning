@@ -288,3 +288,8 @@ kubectl run -i oneshot \
 --keygen-exit-on-complete \
 --keygen-num-to-gen 10
 ```
+* Get logs from the Pod Job: `kubectl logs ${job-pod}`
+* Use liveness probes in your jobs to improve their reliability and transparency.
+* Parallelism:
+  * Job goal: Generate 100 keys by having 10 runs of kuard with each run generation 10 keys. Limit to 5 running pods at a time to minimize cluster load.
+    * `completions: 10, parallelism: 5`
