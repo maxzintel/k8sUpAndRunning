@@ -279,7 +279,7 @@ Work Queue: Parallel Jobs   | Mult Pods processing from central work queue  | 1+
   * First a pod must be created and submitted to the k8s api.
   * Then the pod must be monitored for successful termination.
   * If it fails, the pod will be re-created until successful termination is reached.
-  * Imperatively:
+  * Imperatively: `-i` means this command is interactive. It will show log output from the Pod(s). `restart=OnFailure` is what actually tells K8s to create a Job object. Everything after `--` are command-line args to the container image.
 ```!#/bin/bash
 kubectl run -i oneshot \
 --image=gcr.io/kuar-demo/kuard-amd64:blue \
