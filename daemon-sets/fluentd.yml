@@ -5,6 +5,11 @@ metadata:
   labels:
     app: fluentd
 spec:
+  minReadySeconds: 60
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 50%
   selector:
     matchLabels:
       app: fluentd
