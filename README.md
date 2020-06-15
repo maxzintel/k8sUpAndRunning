@@ -259,3 +259,32 @@ $ kubectl get services // View our new alpaca service (and external clusterIP)
     * Similarly, if you want to set `tags` that are visible to your Cloud Provider, there is a stanza for this as well!
   * Alternatively, you can imperatively label the nodes in your cluster via: `kubectl label nodes ${node-name} ssd=true`.
   * To get the labels for a particular node: `kubectl get nodes ip-192-168-17-43.ec2.internal -o json | jq .metadata.labels`
+  
+## Jobs
+* Best for one-off and/or short-lived tasks.
+* **A Job creates Pods that run until successful termination (exit 0).** Contrastingly, normal pods will continually restart regardless of exit code.
+  * Best for Database Migrations or Batch Jobs.
+* By default, a Job runs a single Pod once until successful termination.
+  * But Jobs can be configured by 2 primary attributes:
+    * The number of job completions we want,
+    * And the number of Pods to run in parallel.
+  * Job Patterns:
+```
+Type                        | Use Case                                      | Behavior                                            | completions | parallelism |
+One Shot                    | DB Migrations                                 | Single pod runs once until successful termination.  | 1           | 1           |
+Parallel Fixed Completions  | Mult Pods processing set of work in parallel  | 1+ Pods running 1+ times until a fixed completion.  | 1+          | 1+          |
+Work Queue: Parallel Jobs   | Mult Pods processing from central work queue  | 1+ Pods running once until successful termination.  | 1           | 1+          |          
+```
+* One Shot:
+  * First a pod must be created and submitted to the k8s api.
+  * Then the pod must be monitored for successful termination.
+  * If it fails, the pod will be re-created until successful termination is reached.
+  * Imperatively:
+```!#/bin/bash
+kubectl run -i oneshot \
+--image=gcr.io/kuar-demo/kuard-amd64:blue \
+--restart=OnFailure \
+-- --keygen-enable \
+--keygen-exit-on-complete \
+--keygen-num-to-gen 10
+```
