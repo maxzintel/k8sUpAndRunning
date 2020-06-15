@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: fluentd
+  labels:
+    app: fluentd
+spec:
+  template:
+    metadata:
+      labels:
+        app: fluentd
+    spec:
+      containers:
+      - name: fluentd
+        image: fluentd/fluentd:v1.11
+        resources:
+          limits:
+            cpu: 500m
+            memory: 200Mi
+          requests:
+            cpu: 100m
+            memory: 200Mi
+        volumeMounts:
+          - mountPath: /var/log
+            name: varlog
+          - mountPath: /var/lib/docker/containers
+            name: varlibdockercontainers
+            readOnly: true

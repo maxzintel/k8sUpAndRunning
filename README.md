@@ -243,3 +243,15 @@ $ kubectl get services // View our new alpaca service (and external clusterIP)
   * `minReadySeconds: 60`: Additional wait time to ensure Pods are healthy. This is best used as a safeguard against bugs or memory leaks that take some time after a pod is running/handling traffic to cause problems. 60s is mostly arbitrary, but in this context we assume that most serious bugs would show up and cause a failed health check within that time period. **NOTE** that this should be configured to align with the timing and failure criteria for your health and liveness probes. In this case, 60s is the minimum time in which a health probe could fail.
   * `progressDeadlineSeconds: 600`: If a given stage of the deployment takes longer than 10mins, mark the deployment as failed. It's best to add some sort of monitoring for failed deployments. Maybe a deployment with failed status triggers an automatic rollback and creates a ticket that requires human intervention, for example.
     * To get the status, look in the `status.conditions` array where there will be a Condition whose type is Progressing and the Status is False.
+  
+## DaemonSets
+* Where deployments and replicasets are about creating a service (like a webserver) with replicas for redundancy, we may want to replicate a Pod on every Node to run some sort of agent or daemon on each node. To do this, we will use DaemonSets!
+* DaemonSets ensure there is a copy of a Pod running across a set of nodes in a Kubernetes cluster.
+  * Some examples: 
+    * Log Collectors, 
+    * Monitoring Agents, 
+    * You can also run specialized intrusion detection software on Nodes that are exposed to the edge network/internet (you would only run the DaemonSet on specific nodes in this case).
+    * Or you can use them to install software on your Nodes.
+* **ReplicaSets should be used when your service is completely decoupled from the Node.** Meaning, we could run multiple copies of a ReplicaSet on a single Node without an issue. DaemonSets **must have one copy on each Node to function properly.**
+* By default, DaemonSets will schedule one per Node, unless a node selector is used to specify.
+  * Use the `nodeName` field in the Pod spec to do this.
