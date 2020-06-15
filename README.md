@@ -293,3 +293,11 @@ kubectl run -i oneshot \
 * Parallelism:
   * Job goal: Generate 100 keys by having 10 runs of kuard with each run generation 10 keys. Limit to 5 running pods at a time to minimize cluster load.
     * `completions: 10, parallelism: 5`
+* Work Queues":
+  * A common use case for jobs is to process work from a work queue.
+    * `Producer => Work Queue => Consumer Replicas`
+    * To do this we will need to create a centralized work queue service (`rs-queue.yaml`). Kuard (demo-app) has one built in. We will need to start an instance of kuard to act as a coordinator for all the work needed to be done.
+      * Then run `QUEUE_POD=$(kubectl get pods -l app=work-queue,component=queue -o jsonpath='{.items[0].metadata.name}')` and `kubectl port-forward $QUEUE_POD 8080:8080` to port forward to your new ReplicaSet. Nav to localhost:8080.
+      * Expose the replicaset with `service-queue.yaml` so we can start loading items into it.
+    * Then, create a ReplicaSet to manage a singleton work queue daemon.
+

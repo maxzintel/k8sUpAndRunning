@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: consumers
+  labels:
+    chapter: jobs
+    app: message-queue
+    component: consumer
+spec: 
+  parallelism: 5
+  template:
+    metadata: 
+      labels:
+        chapter: jobs
+        app: message-queue
+        component: consumer
+    spec:
+      containers:
+      - name: worker
+        image: "gcr.io/kuar-demo/kuard-amd64:blue"
+        imagePullPolicy: Always
+        args: ["--keygen-enable", "--keygen-exit-on-complete", "keygen-memq-server=http://queue:8080/memq/server", "--keygen-memq-queue=keygen"]
+      restartPolicy: OnFailure
+# THIS JOB DOES NOT WORK. PROBABLY OUT OF DATE YAML.
