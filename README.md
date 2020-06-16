@@ -303,4 +303,8 @@ kubectl run -i oneshot \
   * Delete this junk: `kubectl delete rs,svc,job -l chapter=jobs`
 
 ## Config Maps and Secrets
-  * 
+  * There are examples for declarative configmaps here. Secrets, however, are done more imperatively. Lets create a TLS secret as an example for the kuard container.
+    * Once you have a `.crt` and `.key`, run...
+      * `kubectl create secret generic kuard-tls --from-file=kuard.crt --from-file=kuard.key`
+    * Once we have created the cert and key for tls on our demo app, we can use a pod like the kuard-secret.yaml pod to actually mount the secrets such that the Pod can use them.
+  * Secrets are accessed by Pods via the secrets volume type. These volumes are managed by the kubelet and are created at Pod creation. They are stored in RAM, and thus not stored on disk on the Node itself.

@@ -1,1 +1,4 @@
 config-maps/my-config.txt
+config-maps/kuard.key
+config-maps/kuard.crt
+
