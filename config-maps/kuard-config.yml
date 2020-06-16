@@ -25,6 +25,9 @@ spec:
           configMapKeyRef:
             name: my-config
             key: extra-param
+    volumeMounts:
+      - mountPath: /config
+        name: config-volume
   volumes:
     - name: config-volume
       configMap:
