@@ -302,3 +302,5 @@ kubectl run -i oneshot \
     * Then, create a ReplicaSet to manage a singleton work queue daemon.
   * Delete this junk: `kubectl delete rs,svc,job -l chapter=jobs`
 
+## Config Maps and Secrets
+  * 
