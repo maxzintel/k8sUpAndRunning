@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-config
+data: # Below two values are the equivalent of the text file, this just illustrates different methods.
+  another-param: another-value
+  extra-param: extra-value
+  my-config.txt: | # Below are just the contents of the txt file we are pulling these kvp's from.
+    parameter1 = value1
+    parameter2 = value2
