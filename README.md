@@ -308,3 +308,23 @@ kubectl run -i oneshot \
       * `kubectl create secret generic kuard-tls --from-file=kuard.crt --from-file=kuard.key`
     * Once we have created the cert and key for tls on our demo app, we can use a pod like the kuard-secret.yaml pod to actually mount the secrets such that the Pod can use them.
   * Secrets are accessed by Pods via the secrets volume type. These volumes are managed by the kubelet and are created at Pod creation. They are stored in RAM, and thus not stored on disk on the Node itself.
+  * **Private Docker Registries** - Accessed via Image Pull Secrets!
+    * These are stored just like normal secrets but are consumed through the `spec.imagePullSecrets` Pod spec field.
+    * Create and Image Pull Secret with a command like:
+      * `kubectl create secret docker-registry my-image-pull-secret --docker-username=<un> --docker-password=<pw> --docker-email=<email>`
+    * Also note if you have to set IPS frequently, you can instead add the IPS secrets to the default service account associated with each pod. This will prevent you having to specify the secrets in every manifest.
+* Normal kubectl commands work for configmaps and secrets, i.e. `create`, `delete`, `get`,`describe`.
+* When creating configmaps and secrets, there are a few ways you can specify how to load the required data in (if doing so imperatively)...
+  * `--from-file=<filename>` - Load from file where secret data key is the same as the filename.
+  * `--from-file=<key>=<filename>` - ^ But instead we explicitly define the key name.
+  * `--from-file=<directory>` - Load all the files from a directory, filenames will be key names.
+  * `--from-literal=<key>=<value>` - Explicitly define the K/V directly.
+* You can update ConfigMaps and secrets without having to restart/rollout any changes to the Pods/objects using them.
+  * Update from a file:
+    * You'd want an in-use manifest file, and then update the file directly. You would have to add the required data directly in the manifest, however. So this is generally a bad practice with secrets.
+  * Recreate and Update:
+    * If your inputs are stored in separate files...
+      * `kubectl create secret generic kuard-tls --from-file=kuard.crt --from-file=kuard.key --dry-run -o yaml | kubectl replace -f -`
+  * Edit current version
+    * Works best with configmaps since they are not base64 encoded like secrets.
+    * `kubectl edit configmap my-config`
