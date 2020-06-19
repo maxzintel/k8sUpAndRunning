@@ -328,3 +328,4 @@ kubectl run -i oneshot \
   * Edit current version
     * Works best with configmaps since they are not base64 encoded like secrets.
     * `kubectl edit configmap my-config`
+
