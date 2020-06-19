@@ -329,3 +329,17 @@ kubectl run -i oneshot \
     * Works best with configmaps since they are not base64 encoded like secrets.
     * `kubectl edit configmap my-config`
 
+## RBAC
+* Every request to kubernetes is authenticated! Even though managed clusters like AKS and EKS setup authentication/rbac to work in conjunction with cloud IAM, they still integrate with K8s' system for roles, role-bindings, and the cluster variety of each.
+* **Roles**: The set of rules/capabilities. There are restricted by namespace, and specify objects and the verbs that a user with this role may use.
+* **Role Bindings**: The assignment of given role(s) to a user's identity.
+* **ClusterRole and ClusterRoleBinding**: The same as above but are global to the cluster rather than being restricted by namespace.
+* To see the clusterroles present on your cluster (many are built in by default) `kubectl get clusterroles`
+  * `cluster-admin` provides complete access to the entire cluster.
+  * `admin` provides complete access to a namespace.
+  * `edit` allows an end user to modify things in a namespace.
+  * `view` allows read-only access to a namespace.
+* Note: If you edit any of the built in roles, your changes will be wiped if your cluster is updated/restarted for any reason. To prevent this, add `rbac.authorization.k8s.io/autoupdate` to false in the built in ClusterRole resource.
+* To remove unauthorized access, set `--anonymous-auth=false` on your API Server.
+* Managing RBAC:
+  * Testing capabilities with `can-i` - ex: `kubectl auth can-i create pods` or `kubectl auth can-i get pods --subresource=logs` 
