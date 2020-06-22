@@ -343,3 +343,9 @@ kubectl run -i oneshot \
 * To remove unauthorized access, set `--anonymous-auth=false` on your API Server.
 * Managing RBAC:
   * Testing capabilities with `can-i` - ex: `kubectl auth can-i create pods` or `kubectl auth can-i get pods --subresource=logs` 
+
+## StatefulSets!
+* A replicated group of pods, similar to ReplicaSets, but unlike them in that...
+  * Each replica gets a persistent hostname with a unique index (`db-0`, `db-1`, etc...)
+  * Each replica is created in order from lowest to highest index, and creation will block until the Pod at the previous index is healthy and available. Also applies to scaling up!
+  * When a StatefulSet is deleted, each of the managed replica Pods is deleted in order from highest to lowest. This applies to scaling down as well.
