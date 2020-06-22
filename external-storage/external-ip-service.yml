@@ -1,0 +1,6 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: external-ip-database # If we don't have some external address to CNAME k8s to, create this service...
+  # Once this is created, k8s will allocate a virtual IP for the service and populate and A record for it.
+  # All that is left for us to do is to manually populate the the endpoints for the load balancer to redirect traffic to.

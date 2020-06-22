@@ -1,0 +1,7 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: external-database
+spec:
+  type: ExternalName # K8s DNS creates a CNAME for this service to the external address below.
+  externalName: database.company.com # Generally provided by your cloud provider as the DNS address for the database.

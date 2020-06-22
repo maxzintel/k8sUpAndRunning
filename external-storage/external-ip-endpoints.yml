@@ -1,0 +1,9 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: external-ip-database # Part 2 of the external-ip-service.
+subsets:
+  - addresses:
+    - ip: 123.123.0.1 # Populated manually - the IP of our external service.
+    ports:
+    - port: 3306
