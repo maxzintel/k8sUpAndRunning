@@ -1,0 +1,11 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: mongo
+spec:
+  ports:
+  - port: 27017
+    name: peer
+  clusterIP: None # Creates a headless service to manage DNS entries for the stateful set.
+  selector:
+    app: mongo
