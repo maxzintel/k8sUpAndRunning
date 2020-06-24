@@ -77,6 +77,14 @@ spec:
       containers:
       - name: mongodb
         image: mongo:latest
+        livenessProbe:
+          exec:
+            command:
+            - /usr/bin/mongo
+            - --eval
+            - db.serverStatus()
+          initialDelaySeconds: 10
+          timeoutSeconds: 10
         command:
         - mongod
         - --replSet
